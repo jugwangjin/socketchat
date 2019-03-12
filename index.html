@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Chat</title>
+    <style type="text/css">
+      .wholebox{display:-webkit-flex; display:flex; min-width:525px;overflow-x:scroll; height:500px; background-color:#ffffff; position:relative}
+      .name{ width: 10%; }
+      .message{ width: 70%; }
+      .chat{ width: 10%; }
+      .userlistbox{-webkit-flex:initial;flex:initial ;height:100%; min-width:100px; max-width:150px; background-color: #fafafa; overflow-y:scroll;}
+      .chatbox{-webkit-flex:1; flex:1; height:100%; width:550px; background-color: #f8f8f8;overflow-x:scroll; overflow-y:scroll}
+      
+    </style>
+  </head>
+  <body>
+    <div class="wholebox">
+      <div class="userlistbox" id="userlist"></div>
+      <div class="chatbox" id="chatLog"></div>
+    </div>
+    <form id="chat">
+      <input id="name" class="name" type="text">
+      <input id="message" class="message" type="text">
+      <input type="submit" class="chat" value="chat"/>
+    </form>
+    <div id="box" class="box">
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.js"></script>
+    <script type="text/javascript" src="chathtml.js"></script>
+  </body>
+</html>
