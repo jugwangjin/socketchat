@@ -11,12 +11,17 @@ app.get('/chathtml.js',function(req, res){
     res.sendFile(__dirname + '/chathtml.js');
   });
 
+function pad(n, width) {
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+}
+
 var count = 0;
 var usernamedict = {};
 var usercolordict = {};
 io.on('connection', function(socket){
   d = new Date();
-  time = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+  time = pad(d.getHours(),2) + ':' + pad(d.getMinutes(),2) + ':' + pad(d.getSeconds(),2);
   console.log(socket.id + " is connected, count is "+ count + ' at ' + time);
   socket.count = count;
 
@@ -31,13 +36,13 @@ io.on('connection', function(socket){
   usercolordict[socket.count.toString()] = socket.color;
 
   var d = new Date();
-  var time = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+  time = pad(d.getHours(),2) + ':' + pad(d.getMinutes(),2) + ':' + pad(d.getSeconds(),2);
   io.emit('receive message', "SERVER", usernamedict[socket.count.toString()] + "("+ socket.count+")님이 들어왔습니다.", time, socket.color);
   io.emit('change userlist', usernamedict, usercolordict);
 
   socket.on('disconnect', function(){
     d = new Date();
-    time = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+    time = pad(d.getHours(),2) + ':' + pad(d.getMinutes(),2) + ':' + pad(d.getSeconds(),2);
     console.log(socket.id +" has disconnected, count was "+ count + ' at ' + time);
     io.emit('receive message', "SERVER", usernamedict[socket.count.toString()] + "("+ socket.count+")님이 나갔습니다.", time, socket.color);
 
@@ -61,11 +66,8 @@ io.on('connection', function(socket){
         io.emit('change userlist', usernamedict, usercolordict);
       }
     }
-
-
-
     d = new Date();
-    time = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+    time = pad(d.getHours(),2) + ':' + pad(d.getMinutes(),2) + ':' + pad(d.getSeconds(),2);
     console.log(name + ' : ' + text + ' ('+time+') '+socket.color);
     io.emit('receive message', name, text, time, socket.color);
   });
