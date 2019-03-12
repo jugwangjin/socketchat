@@ -18,7 +18,6 @@ io.on('connection', function(socket){
   d = new Date();
   time = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
   console.log(socket.id + " is connected, count is "+ count + ' at ' + time);
-  io.to(socket.id).emit('change name', 'No.'+count);
   socket.count = count;
 
   count = count+1;
@@ -27,19 +26,20 @@ io.on('connection', function(socket){
   var green = Math.floor (Math.random() * 196);
   var blue = Math.floor (Math.random() * 196);
   socket.color = '#' + red.toString(16) + green.toString(16) + blue.toString(16);
-  usernamedict[socket.count.toString()] = 'No.'+socket.count;
+  usernamedict[socket.count.toString()] = count+'번째 사람';
+  io.to(socket.id).emit('change name', usernamedict[socket.count.toString()]);
   usercolordict[socket.count.toString()] = socket.color;
 
   var d = new Date();
   var time = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
-  io.emit('receive message', "SERVER", usernamedict[socket.count.toString()] + "("+ socket.count+") has connected.", time, socket.color);
+  io.emit('receive message', "SERVER", usernamedict[socket.count.toString()] + "("+ socket.count+")님이 들어왔습니다.", time, socket.color);
   io.emit('change userlist', usernamedict, usercolordict);
 
   socket.on('disconnect', function(){
     d = new Date();
     time = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
     console.log(socket.id +" has disconnected, count was "+ count + ' at ' + time);
-    io.emit('receive message', "SERVER", usernamedict[socket.count.toString()] + "("+ socket.count+") has disconnected.", time, socket.color);
+    io.emit('receive message', "SERVER", usernamedict[socket.count.toString()] + "("+ socket.count+")님이 나갔습니다.", time, socket.color);
 
     if (!delete usernamedict[socket.count.toString()]){
       console.log("error deleting disconnected user");
@@ -56,7 +56,7 @@ io.on('connection', function(socket){
         io.to(socket.id).emit('change name', usernamedict[socket.count.toString()]);
         name = usernamedict[socket.count.toString()];
       }else{
-        io.emit('receive message', "SERVER", usernamedict[socket.count.toString()] +"("+ socket.count+") has changed name to " +name +"("+ socket.count+").", time, socket.color);
+        io.emit('receive message', "SERVER", usernamedict[socket.count.toString()] +"("+ socket.count+")님이 이름을 " +name +"("+ socket.count+")로 바꿨습니다.", time, socket.color);
         usernamedict[socket.count.toString()]=name;
         io.emit('change userlist', usernamedict, usercolordict);
       }
