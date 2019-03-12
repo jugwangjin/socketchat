@@ -1,6 +1,6 @@
 Chat Program
 ============
-- with Socket Programming -
+- with Socket Programming
 ---------------------------
 # 사용 방법
 ## 서버 켜기
